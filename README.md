@@ -1,32 +1,24 @@
 # Mikita Daroshkin
 
-AI/ML engineer. Production LLM systems and the ML underneath.
+AI/ML engineer building production LLM systems and the ML underneath.
 
-```
-agents         multi-agent orchestration, A2A, MCP, function calling, grammar-constrained decoding, ReAct, Plan-and-Execute, maker-checker, critic-verifier, self-consistency, log-prob confidence gating, deterministic fallbacks, bounded retries, circuit breakers, idempotent tools, token-exchange identity, sandboxed execution, egress control
-evaluation     golden datasets, LLM-as-judge, position-bias correction, calibrated rubrics, faithfulness, groundedness, bootstrap confidence intervals, deterministic replay, span-level token accounting, regression gates in CI, OpenTelemetry
-retrieval      hybrid dense + BM25, reciprocal-rank fusion, cross-encoder and ColBERT late-interaction rerank, SPLADE, HyDE, step-back, query decomposition, contextual chunking, hard-negative mining, contrastive and Matryoshka embeddings, HNSW, IVF-PQ, scalar and binary quantization, GraphRAG, self-correcting text-to-SQL
-serving        continuous batching, paged and radix KV-cache, chunked prefill, disaggregated prefill/decode, speculative and assisted decoding, FlashAttention, CUDA graphs, torch.compile, FP8, INT4, KV-cache quantization, custom Triton kernels, model routing, multi-LoRA, SLA-aware scheduling
-training       FSDP, DeepSpeed ZeRO-3, tensor/pipeline/sequence parallelism, activation recomputation, NCCL tuning, BF16, FP8, LoRA/QLoRA, SFT, DPO, reward modeling, distillation
-vision + ml    ViT, 3D U-Net, Mask R-CNN, ResNet, CLIP, segmentation, detection, gradient boosting, probability calibration, conformal prediction, causal inference, uplift modeling, survival analysis, LSTMs, time series
-systems + hpc  tiled CUDA (shared-memory tiling, warp primitives, coalesced access), MPI, InfiniBand, lock-free concurrency, Kafka, backpressure, idempotency, blue-green/shadow/canary, feature stores, model registry
-```
+I build multi-agent systems orchestrated in LangGraph and Google ADK over A2A and MCP, calling tools through function calling and grammar-constrained decoding, planned with ReAct and Plan-and-Execute, and kept reliable by maker-checker and critic-verifier loops, self-consistency, log-prob confidence gating with deterministic fallbacks, bounded retries and circuit breakers over idempotent tools, token-exchange identity between agents, sandboxed execution, and egress control.
 
-## Stack
+Evaluation runs in CI over golden datasets, scored by LLM-as-judge with position-bias correction and calibrated rubrics, faithfulness and groundedness measured with bootstrap confidence intervals, deterministic replay and span-level token accounting under OpenTelemetry, and regression gates that block the merge before behavior drifts.
 
-```
-frameworks    PyTorch, JAX, LangGraph, LangChain, Google ADK, DSPy, Semantic Kernel, CrewAI, AutoGen, Megatron-LM, NeMo, scikit-learn, XGBoost, LightGBM
-serving       vLLM, TensorRT-LLM, SGLang, Triton, TGI, LiteRT, ONNX Runtime; open-weight (Llama, Qwen, DeepSeek, Gemma, Mistral, Phi)
-retrieval     pgvector, FAISS, Qdrant, Milvus, OpenSearch, Vertex AI Vector Search, Azure AI Search, Neo4j, Neptune
-eval + obs    RAGAS, DeepEval, Promptfoo, Braintrust, LangSmith, Langfuse, Arize Phoenix, LlamaGuard, NeMo Guardrails
-data          BigQuery, Snowflake, Databricks (Unity Catalog, DBRX, Delta Live Tables), Spark, dbt, Dagster, Airflow, DuckDB, Iceberg, Kafka, Trino
-cloud         GCP (Vertex AI, GKE), AWS (SageMaker, Bedrock, Trainium), Azure (Azure OpenAI, ML), Docker, Kubernetes, Terraform, Argo, MLflow, Weights and Biases
-enterprise    Palantir Foundry/AIP, Salesforce Agentforce, ServiceNow, SAP, Microsoft Power Platform, Epic/FHIR
-governance    NIST CSF, ISO 42001, EU AI Act, GDPR, HIPAA, GxP, on-prem and sovereign, multi-tenancy, PII redaction, RBAC
-languages     Python, C++/CUDA, SQL, TypeScript, Go, Java, C#, R
-```
+Retrieval is hybrid dense and BM25 fused with reciprocal-rank fusion, reranked by cross-encoders and ColBERT late-interaction, extended with SPLADE, HyDE and step-back rewriting, and query decomposition, fed by contextual chunking and hard-negative mining over contrastive and Matryoshka embeddings, indexed with HNSW or IVF-PQ under scalar and binary quantization, and swapped for GraphRAG or self-correcting text-to-SQL when a graph or schema answers better than embeddings.
+
+Serving goes down to the kernel with continuous batching, paged and radix KV-cache, chunked prefill and disaggregated prefill/decode, speculative and assisted decoding, FlashAttention, CUDA graphs and torch.compile, FP8 and INT4 with KV-cache quantization, custom Triton kernels, model routing, multi-LoRA, and SLA-aware scheduling on vLLM, TensorRT-LLM, and SGLang. I have compressed 8B stacks 27x to run offline on a phone and driven multi-GPU fleets to 3 to 4x throughput per dollar.
+
+Training runs on FSDP and DeepSpeed ZeRO-3 with tensor, pipeline, and sequence parallelism, activation recomputation and NCCL-tuned collectives in BF16 or FP8, using LoRA/QLoRA, SFT, DPO, reward modeling, and distillation.
+
+Underneath sits nine years of the rest: tiled CUDA with shared-memory tiling and warp-level primitives, MPI over InfiniBand, computer vision on ViT, 3D U-Net, Mask R-CNN, and CLIP, and classical ML with real statistical discipline in gradient boosting, probability calibration, conformal prediction, and causal inference, all on lock-free, streaming, distributed systems.
+
+It ships across GCP, AWS, and Azure, with Databricks, Snowflake, and BigQuery for data and Palantir Foundry and Salesforce Agentforce on the enterprise side, under NIST CSF, ISO 42001, the EU AI Act, HIPAA, and GxP where the domain demands it.
 
 ## Repositories
+
+Public reference implementations of the methods above, small enough to clone and run.
 
 - [agentic-rag-evals](https://github.com/mikitadaroshkin/agentic-rag-evals): LangGraph agentic RAG, hybrid retrieval, LLM-as-judge eval suite, CI gate on eval-metric regression, OpenTelemetry, FastAPI, Docker.
 - [gpu-mpi-search](https://github.com/mikitadaroshkin/gpu-mpi-search): BM25, cross-encoder rerank, tiled CUDA kernels, data-parallel scoring over MPI and multiprocessing.
