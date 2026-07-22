@@ -1,16 +1,16 @@
 # Mikita Daroshkin
 
-I build LLM systems that hold up in production, which mostly means the parts that aren't the demo: the evaluation harness, the retrieval that has to be right, the serving that has to be fast, and the failure modes nobody notices until real traffic finds them.
+I build LLM systems that hold up in production: the eval harness, the retrieval, the serving, and the failure modes that only show up under real traffic.
 
-Most of my work now is agentic, and the hard problems there aren't the happy path, they're reliability and identity. Maker-checker verification, log-prob confidence gates with deterministic fallbacks, token-exchange auth between agents, sandboxed tool execution. Agents fail quietly, so evaluation goes in first: golden datasets and LLM-as-judge checks wired into CI, with OpenTelemetry tracing and deterministic replay, before anything reaches a user.
+Most of my work is agentic, and the hard parts are reliability and identity, not the happy path: maker-checker verification, log-prob confidence gates with deterministic fallbacks, token-exchange auth between agents, sandboxed tool execution, bounded retries. Agents fail quietly, so evals go in first: golden datasets, LLM-as-judge and faithfulness checks in CI, OpenTelemetry tracing, deterministic replay, merge-blocking regression gates.
 
-A lot of RAG quality actually lives in retrieval, so I treat it as the main event rather than a vector-store call. Hybrid dense and lexical with reciprocal-rank fusion, cross-encoder or ColBERT reranking, query rewriting, and the unglamorous chunking and hard-negative mining that move the numbers more than swapping the model does. When a knowledge graph or text-to-SQL fits the question better than embeddings, I reach for that instead.
+Retrieval is where RAG quality lives, so I spend time there instead of on model swaps: hybrid dense and BM25 with reciprocal-rank fusion, cross-encoder and ColBERT reranking, query rewriting and decomposition, semantic chunking, hard-negative mining, HNSW and IVF-PQ tradeoffs. GraphRAG and text-to-SQL when the question fits a graph or a schema better than embeddings.
 
-On serving I go down to the kernel: continuous batching, paged KV-cache, speculative decoding, FlashAttention, and enough profiling to know where the time actually goes. I've compressed models to run offline on phones and tuned serving fleets for throughput per dollar. I came up through CUDA and MPI, distributed training on FSDP and DeepSpeed, and years of computer vision and classical ML before any of this was called agentic, so the whole stack reads as one system to me rather than layers I bolt together.
+On serving I work down to the kernel: continuous batching, paged KV-cache, prefix caching, speculative decoding, FlashAttention, model routing, and enough profiling to find where the time actually goes. I have quantized and distilled models to run offline on-device, and tuned serving fleets for throughput per dollar.
 
-Earlier I co-founded three companies as the technical half and shipped ML in games, medical imaging, and finance. Enough production incidents to be paranoid in the useful ways.
+The base under it: CUDA and MPI, distributed training on FSDP and DeepSpeed, computer vision (ViT, 3D U-Net, Mask R-CNN, CLIP) and classical ML (gradient boosting, calibration, conformal prediction, causal inference) from before the LLM wave. Three companies co-founded as the technical half; ML shipped in games, medical imaging, and finance.
 
-The repositories below are small, public, and actually run. They are reference implementations of the methods I use, not the proprietary work.
+Repos below are small, public, and runnable, reference implementations of the methods rather than the proprietary work.
 
 ## Repositories
 
