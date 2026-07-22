@@ -1,16 +1,22 @@
 # Mikita Daroshkin
 
-I build production LLM systems and the evaluation that gates them: golden datasets, LLM-as-judge scoring in CI, OpenTelemetry traces, deterministic replay, regression thresholds that block merges.
+I design, build, and operate production LLM systems end to end, plus the evaluation that keeps them correct: golden datasets, LLM-as-judge regression gates in CI, OpenTelemetry tracing, deterministic replay, and merge-blocking thresholds on faithfulness, hallucination, jailbreak, and toxicity.
 
-Agent orchestration on LangGraph and Google ADK over A2A and MCP; multi-agent RAG and GraphRAG; hybrid retrieval (dense + BM25, reciprocal-rank fusion, cross-encoder rerank) across pgvector, FAISS, and Vertex AI Vector Search. Reliability is part of the build: maker-checker agent verification, log-prob confidence gates with deterministic fallbacks, structured outputs and function calling, guardrails, OAuth token-exchange identity between agents, egress-controlled perimeters, and policy-as-code promotion gates.
+## What I build
 
-Fine-tuning with LoRA/QLoRA and DPO; distributed training on FSDP and DeepSpeed. Inference serving on vLLM, TensorRT-LLM, and SGLang tuned for throughput per dollar: continuous batching, KV-cache reuse, speculative decoding, GPTQ/AWQ quantization.
+Multi-agent systems on Vertex AI Agent Engine and Google ADK: federated agents over A2A with OAuth token-exchange identity propagated at every hop, maker-checker verification, log-prob confidence gates with deterministic code fallbacks, MCP-wrapped tools inside egress-locked VPC-SC perimeters, OPA policy-as-code promotion gates, per-agent eval scorecards, and zero-registration agent CI/CD.
 
-Before LLMs: 3D U-Net segmentation on volumetric MRI, ViT captioning, tiled CUDA and MPI kernels, gradient-boosted tabular models.
+Retrieval built for correctness, not demos: hybrid dense + BM25 with reciprocal-rank fusion and cross-encoder reranking over pgvector, FAISS, and Vertex AI Vector Search; GraphRAG and text-to-SQL with schema-linking and EXPLAIN-driven self-correction; dual-encoder text-and-vision multimodal retrieval; 12 TB multimodal document lakes with vision-language agent crews.
+
+Inference at scale on vLLM, TensorRT-LLM, SGLang, and Triton across multi-GPU GKE: continuous batching, KV-cache optimization, speculative decoding, FlashAttention, GPTQ/AWQ quantization, and Nsight kernel profiling, at 3.2 to 4.7x throughput per dollar. On-device, an 8B chat-RAG stack compressed 27x to under 600 MB with quantization, distillation, LiteRT/TFLite GPU delegates, and ONNX Runtime Mobile, running fully offline on mid-tier Android.
+
+Post-training and reliability: LoRA/QLoRA, SFT, DPO, reward models, and RLHF on Slurm/DGX with FSDP and DeepSpeed; calibrated, bias-audited ranking with conformal prediction; document-intelligence pipelines with LLM cross-document validation at 99.2% extraction accuracy.
+
+Foundations under all of it: 3D U-Net segmentation on volumetric MRI trained on a 10M+ scan corpus, ViT captioning, tiled CUDA and MPI kernels, gradient-boosted tabular models, distributed training and serving from the kernel up.
 
 ## Repositories
 
-All build in CI. agentic-rag-evals gates merges on eval-metric regression.
+Public reference implementations, each small enough to clone and run. All build in CI; agentic-rag-evals gates its own merges on eval-metric regression.
 
 - [agentic-rag-evals](https://github.com/mikitadaroshkin/agentic-rag-evals): LangGraph agentic RAG, hybrid retrieval, LLM-as-judge eval suite, CI regression gate, OpenTelemetry, FastAPI, Docker.
 - [gpu-mpi-search](https://github.com/mikitadaroshkin/gpu-mpi-search): BM25 with cross-encoder rerank, tiled CUDA kernels, data-parallel scoring (MPI/multiprocessing). Coursework.
@@ -22,19 +28,15 @@ All build in CI. agentic-rag-evals gates merges on eval-metric regression.
 
 ## Stack
 
-![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)
-![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white)
-![CUDA](https://img.shields.io/badge/CUDA-76B900?style=flat-square&logo=nvidia&logoColor=white)
-![Hugging Face](https://img.shields.io/badge/Hugging%20Face-FFD21E?style=flat-square&logo=huggingface&logoColor=black)
-![LangChain](https://img.shields.io/badge/LangGraph-1C3C3C?style=flat-square&logo=langchain&logoColor=white)
-![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/pgvector-4169E1?style=flat-square&logo=postgresql&logoColor=white)
-![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white)
-![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?style=flat-square&logo=kubernetes&logoColor=white)
-![Terraform](https://img.shields.io/badge/Terraform-7B42BC?style=flat-square&logo=terraform&logoColor=white)
-![Google Cloud](https://img.shields.io/badge/Google%20Cloud-4285F4?style=flat-square&logo=googlecloud&logoColor=white)
-![AWS](https://img.shields.io/badge/AWS-232F3E?style=flat-square&logo=amazonwebservices&logoColor=white)
-![Azure](https://img.shields.io/badge/Azure-0078D4?style=flat-square&logo=microsoftazure&logoColor=white)
-![OpenTelemetry](https://img.shields.io/badge/OpenTelemetry-000000?style=flat-square&logo=opentelemetry&logoColor=white)
+```
+llm / agents   LangGraph, LangChain, Google ADK, DSPy, Semantic Kernel, CrewAI, AutoGen, MCP, A2A, function calling, structured outputs
+retrieval      pgvector, FAISS, Qdrant, Milvus, Vertex AI Vector Search, BM25, reciprocal-rank fusion, cross-encoder rerank, ColBERT, SPLADE, GraphRAG
+serving        vLLM, TensorRT-LLM, SGLang, Triton, TGI, continuous batching, KV-cache, speculative decoding, FlashAttention, GPTQ/AWQ, distillation, LiteRT, ONNX Runtime
+training       PyTorch, FSDP, DeepSpeed, Megatron-LM, NeMo, LoRA/QLoRA, SFT, DPO, RLHF, PEFT, Slurm/DGX
+eval / obs     golden sets, LLM-as-judge, RAGAS, DeepEval, Promptfoo, Braintrust, LangSmith, Langfuse, Arize Phoenix, OpenTelemetry
+data           BigQuery, Snowflake, Databricks, Spark, dbt, DuckDB, Kafka, pgvector
+cloud          GCP (Vertex AI), AWS (SageMaker, Bedrock), Azure (Azure OpenAI), Docker, Kubernetes, Terraform, Argo, MLflow, Weights & Biases
+languages      Python, C++/CUDA, SQL, TypeScript, Go
+```
 
 [mikitadaroshkin.com](https://mikitadaroshkin.com/) | mikitadaroshkin@gmail.com
