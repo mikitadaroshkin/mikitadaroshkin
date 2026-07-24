@@ -1,46 +1,6 @@
 # Mikita Daroshkin
 
-AI/ML engineer building production LLM systems and the ML underneath. Nine years, 30+ systems shipped, working forward deployed: one seat covering engineer, architect, and delivery lead.
-
-## Agents
-
-The largest so far is a multi-agent genomics mesh for a pharma research organisation, running on Vertex AI Agent Engine: specialist agents over an internal literature corpus that answer in 1.4 minutes what used to take a research team weeks. It now runs entirely on the client's own seven engineers, which was the point. Elsewhere, a fleet of Claude agents inside Workday, and a voice and chat booking agent on Bedrock over airline APIs behind guardrails.
-
-That work is LangGraph and Google ADK, communicating over A2A and MCP. Tool calls go through function calling and grammar-constrained decoding. Planning is ReAct or Plan-and-Execute. The reliability layer carries the weight: maker-checker and critic-verifier loops, self-consistency, log-prob confidence gating with deterministic fallback. Tools stay idempotent behind bounded retries and circuit breakers. Agents authenticate by token exchange, execute sandboxed, and egress is controlled.
-
-## Evaluation
-
-I built the LLM evaluation program a Fortune 100 division standardised on, and I hold everything else to it.
-
-Behavior is gated on evaluation in CI. Golden datasets scored by LLM-as-judge, with position-bias correction and calibrated rubrics. Faithfulness and groundedness report bootstrap confidence intervals. Runs replay deterministically; OpenTelemetry carries span-level token accounting. Regression thresholds block the merge. A prompt is code and should be able to fail the build.
-
-## Retrieval
-
-Twelve terabytes of construction documents behind a RAG lake in pgvector. A document-intelligence pipeline at 99.2% extraction accuracy that moved mortgage files from nine days to same-day. An admissions screening model calibrated to 94% precision at 90% recall across 250+ facilities and two million patient-days a month.
-
-Retrieval starts hybrid: dense and BM25 fused by reciprocal rank, reranked by cross-encoder or ColBERT late interaction. SPLADE where the match must stay lexical but learned. Queries get HyDE, step-back rewriting, and decomposition. Chunking is contextual; embeddings come from contrastive training and hard-negative mining, Matryoshka where vectors shorten without retraining. Indexes are HNSW or IVF-PQ under scalar or binary quantization. GraphRAG or self-correcting text-to-SQL where a graph or a schema fits better than embeddings.
-
-## Serving
-
-An 8B multimodal assistant compressed 27x to run offline on a mid-tier Android phone, for field technicians working without signal. On the fleet side, 3 to 4x throughput per dollar against seven-figure inference budgets.
-
-Serving goes down to the kernel. Continuous batching over paged and radix KV-cache, chunked prefill, prefill/decode disaggregation. Speculative and assisted decoding. FlashAttention, CUDA graphs, torch.compile, FP8 and INT4 against a quantized KV-cache, custom Triton kernels where the framework falls short. Model routing, multi-LoRA, and SLA-aware scheduling on vLLM, TensorRT-LLM, and SGLang.
-
-## Training
-
-Back when the frontier models were not good enough yet, I fine-tuned a GPT-2 that beat GPT-3 few-shot on the task at an eighteenth of the cost. That habit stuck: the smaller model that holds quality is usually the one that ships.
-
-Training is FSDP or DeepSpeed ZeRO-3, sharded across tensor, pipeline, and sequence parallelism. Activation recomputation, NCCL collectives tuned to the interconnect, BF16 or FP8. Post-training is LoRA and QLoRA, SFT, DPO, reward modeling, and distillation.
-
-## Foundations
-
-Two years of senior ML research under FDA regulation came before any of the LLM work, and the layer under that is older still: tiled CUDA with shared-memory tiling and warp-level primitives, MPI over InfiniBand, computer vision on ViT, 3D U-Net, Mask R-CNN, and CLIP. Then classical ML with statistical discipline: gradient boosting, probability calibration, conformal prediction, causal inference, over lock-free streaming and distributed systems. It is why a calibration curve still comes before a bigger model.
-
-## Delivery
-
-All of the above shipped in regulated industries: pharma, healthcare, lending, aviation. Work starts in a repo and ends under audit.
-
-GCP, AWS, and Azure. Data on Databricks, Snowflake, and BigQuery; vectors in pgvector, FAISS, or Qdrant; integrations into Palantir Foundry, Salesforce Agentforce, ServiceNow, and FHIR. Regulated domains ship under NIST CSF, ISO 42001, the EU AI Act, HIPAA, and GxP.
+AI/ML engineer building production LLM systems and the ML underneath: nine years, 30+ systems shipped, working forward deployed, one seat covering engineer, architect, and delivery lead. Most of the work is agentic. The largest so far is a multi-agent genomics mesh for a pharma research organisation on Vertex AI Agent Engine, specialist agents over an internal literature corpus answering in 1.4 minutes what used to take a research team weeks, now run entirely by the client's own seven engineers; elsewhere a fleet of Claude agents inside Workday, and a voice and chat booking agent on Amazon Bedrock behind guardrails. That work is LangGraph, LangChain, and Google ADK, with CrewAI and DSPy where they fit, communicating over A2A and MCP. Tool calls go through function calling and grammar-constrained decoding. Planning is ReAct or Plan-and-Execute. The reliability layer carries the weight: maker-checker and critic-verifier loops, self-consistency, log-prob confidence gating with deterministic fallback. Tools stay idempotent behind bounded retries and circuit breakers, agents authenticate by token exchange, execution is sandboxed and egress controlled. Behavior is gated on evaluation in CI, the program I built for a Fortune 100 division and hold everything else to: golden datasets scored by LLM-as-judge with position-bias correction and calibrated rubrics, faithfulness and groundedness reported with bootstrap confidence intervals, deterministic replay, span-level token accounting under OpenTelemetry, regression thresholds that block the merge. A prompt is code and should be able to fail the build. On retrieval I have put twelve terabytes of construction documents behind a RAG lake in pgvector, a document-intelligence pipeline at 99.2% extraction accuracy that moved mortgage files from nine days to same-day, and an admissions model calibrated to 94% precision at 90% recall across 250+ facilities and two million patient-days a month. Retrieval starts hybrid: dense and BM25 fused by reciprocal rank, reranked by cross-encoder or ColBERT late interaction, SPLADE where the match must stay lexical but learned. Queries get HyDE, step-back rewriting, and decomposition; chunking is contextual; embeddings come from contrastive training and hard-negative mining, Matryoshka where vectors shorten without retraining; indexes are HNSW or IVF-PQ under scalar or binary quantization, in pgvector, FAISS, Qdrant, or Elasticsearch. GraphRAG and knowledge graphs in Neo4j where the relations matter, self-correcting text-to-SQL where a schema fits better than embeddings. Serving goes down to the kernel: an 8B multimodal assistant compressed 27x to run offline on a mid-tier Android phone for field technicians without signal, and multi-GPU fleets held at 3 to 4x throughput per dollar against seven-figure inference budgets. Continuous batching over paged and radix KV-cache, chunked prefill, prefill/decode disaggregation, speculative and assisted decoding, FlashAttention, CUDA graphs, torch.compile, FP8 and INT4 against a quantized KV-cache, custom Triton kernels where the framework falls short, model routing, multi-LoRA, and SLA-aware scheduling on vLLM, TensorRT-LLM, and SGLang, against the Claude, Gemini, and OpenAI APIs. Training is FSDP or DeepSpeed ZeRO-3 sharded across tensor, pipeline, and sequence parallelism, activation recomputation, NCCL collectives tuned to the interconnect, BF16 or FP8; post-training is LoRA and QLoRA, SFT, DPO, RLHF, reward modeling, and distillation, a habit from fine-tuning a GPT-2 that beat GPT-3 few-shot at an eighteenth of the cost, back when the frontier models were not good enough yet. Underneath it is Python and PyTorch, with TensorFlow, Hugging Face Transformers, scikit-learn, and XGBoost where the problem is not a language model, and older still: two years of senior ML research under FDA regulation, tiled CUDA with shared-memory tiling and warp-level primitives, MPI over InfiniBand, computer vision on ViT, 3D U-Net, Mask R-CNN, and CLIP, recommender systems, and classical ML with statistical discipline in gradient boosting, probability calibration, conformal prediction, and causal inference over lock-free streaming and distributed systems. It is why a calibration curve still comes before a bigger model. All of it ships in regulated industries, pharma, healthcare, lending, and aviation, across GCP, AWS, and Azure on Vertex AI, SageMaker, and Azure OpenAI, in Docker and Kubernetes under Terraform and CI/CD with Airflow, model monitoring, and A/B testing, over Databricks, Snowflake, BigQuery, Spark and PySpark, Kafka, dbt, Postgres, and MongoDB, integrating Palantir Foundry, Salesforce Agentforce, ServiceNow, Workday, and FHIR, under NIST CSF, ISO 42001, the EU AI Act, HIPAA, and GxP. Work starts in a repo and ends under audit.
 
 ## Repositories
 
